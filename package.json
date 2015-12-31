@@ -1,0 +1,19 @@
+{
+  "name": "linode-dns",
+  "version": "1.0.0",
+  "description": "Dynamic updater of a linode DNS mapping",
+  "main": "main.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Alex Collins",
+  "license": "GPL v3",
+  "devDependencies": {
+    "blanket": "^1.2.1",
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4",
+    "nock": "^3.6.0",
+    "request": "^2.67.0",
+    "validator": "^4.4.0"
+  }
+}
