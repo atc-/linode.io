@@ -1,20 +1,25 @@
 {
-  "name": "linode.js",
+  "name": "linode.io",
   "version": "0.0.2",
   "description": "An async' Promise/A+ client library for the Linode API",
+  "repository": "github.com/atc-/linode.io",
   "main": "Linode.js",
   "scripts": {
     "test": "mocha"
   },
   "author": "Alex Collins",
   "license": "GPL-3.0",
-  "engines" : { "node" : ">=5.3.0" },
+  "engines": {
+    "node": ">=5.3.0"
+  },
+  "dependencies": {
+    "request": "^2.67.0"
+  },
   "devDependencies": {
     "blanket": "^1.2.1",
     "chai": "^3.4.1",
     "mocha": "^2.3.4",
     "nock": "^3.6.0",
-    "request": "^2.67.0",
     "validator": "^4.4.0"
   }
 }
