@@ -1,4 +1,4 @@
-# linode.js
+# linode.io
 A set of async Linode API wrappers in ES6 & Node JS.
 
 Built on [Promises/A+](https://promisesaplus.com/), this asynchronous implementation provides an efficient and modern
@@ -16,7 +16,7 @@ Currently, this library supports:
 
 ### Listing domains
 
-    const Linode = require('Linode');
+    const Linode = require('linode.io');
     const dns = new Linode(apiKey).dns();
     dns.getDomains().then(console.log);
     // See your domains listed
