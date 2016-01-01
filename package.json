@@ -1,14 +1,14 @@
 {
   "name": "linode.js",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "An async' Promise/A+ client library for the Linode API",
-  "main": "main.js",
+  "main": "Linode.js",
   "scripts": {
     "test": "mocha"
   },
   "author": "Alex Collins",
   "license": "GPL-3.0",
-  "engines" : { "node" : ">=5.30" },
+  "engines" : { "node" : ">=5.3.0" },
   "devDependencies": {
     "blanket": "^1.2.1",
     "chai": "^3.4.1",
