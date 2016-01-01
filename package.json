@@ -1,9 +1,11 @@
 {
   "name": "linode-dns",
   "version": "1.0.0",
-  "description": "Dynamic updater of a linode DNS mapping",
+  "description": "An asyn' Promise/A+ client library for the Linode API",
   "main": "main.js",
   "scripts": {
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile",
     "test": "mocha"
   },
   "author": "Alex Collins",
