@@ -1,3 +1,5 @@
+'use strict';
+
 const DNS = require('./lib/DNS');
 
 class Linode {
@@ -6,7 +8,7 @@ class Linode {
   }
 
   dns () {
-    return DNS.create(apiKey);
+    return DNS.create(this.apiKey);
   }
 }
 
