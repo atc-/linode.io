@@ -1,15 +1,14 @@
 {
-  "name": "linode-dns",
+  "name": "linode.js",
   "version": "1.0.0",
   "description": "An asyn' Promise/A+ client library for the Linode API",
   "main": "main.js",
   "scripts": {
-    "compile": "babel -d lib/ src/",
-    "prepublish": "npm run compile",
     "test": "mocha"
   },
   "author": "Alex Collins",
-  "license": "GPL v3",
+  "license": "GPL-3.0",
+  "engines" : { "node" : ">=5.30" },
   "devDependencies": {
     "blanket": "^1.2.1",
     "chai": "^3.4.1",
