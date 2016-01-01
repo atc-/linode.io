@@ -21,8 +21,10 @@ var lookupIPAndUpdateDomain = (domain, subdomain) => {
   return this.getExternalIP().then((ip) => { l.findAndUpdateDomain(domain, subdomain, ip) });
 };
 
-const getExternalIP = () => {
-  return get('http://' + this.lookupService).then((ipStr) => {
+const getExternalIP = (lookupService) => {
+  lookupService =
+    lookupService != '' && lookupService ? lookupService : 'www.icanhazip.com';
+  return get('http://' + lookupService).then((ipStr) => {
     return ipStr.trim()
   });
 };
@@ -30,8 +32,6 @@ const getExternalIP = () => {
 class DomainService {
   constructor(apiKey, options) {
     this.apiKey = getOrThrow(apiKey, "apiKey");
-    this.lookupService =
-      options && options.lookupServiceURL != '' && options.lookupServiceURL ? options.lookupServiceURL : 'www.icanhazip.com';
   }
 
   getDomains() {
@@ -67,6 +67,6 @@ class DomainService {
 }
 
 module.exports = {
-  create: (apiKey) => { return new DomainService(apiKey) },
+  create: (apiKey, options) => { return new DomainService(apiKey, options) },
   getExternalIP: getExternalIP
 };

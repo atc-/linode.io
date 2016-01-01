@@ -89,10 +89,6 @@ describe('DNS', () => {
     it('Asserts mandatory parameters', () => {
       expect(() => DNS.create()).to.throw(Error, 'apiKey is required');
     });
-
-    it('uses options', () => {
-      expect(DNS.create('abc', {lookupServiceURL: 'bob.com'}).lookupService).to.equal('bob.com');
-    });
   });
 
   describe('#findDomain', () => {
@@ -122,7 +118,7 @@ describe('DNS', () => {
 
       const scope = nock('http://www.icanhazip.com').get('/').reply(200, '123.123.123.123');
 
-      return DNS.create('abc').getExternalIP().then((extIP) => {
+      return DNS.getExternalIP().then((extIP) => {
         expect(validator.isIP(extIP)).to.be.true;
         expect(extIP).to.equal('123.123.123.123');
         expect(scope.isDone()).to.be.true;
@@ -130,7 +126,7 @@ describe('DNS', () => {
     });
 
     it('Invokes reject when the lookup fails', () => {
-      return DNS.create('abc', {lookupServiceURL: '127.0.0.1:1234'}).getExternalIP().then((extIP) => {
+      return DNS.getExternalIP('127.0.0.1:1234').then((extIP) => {
         console.error("This success handler shouldn't have been called");
         throw new Error("This success handler should not have been called:" + extIP);
       }).catch((err) => {
