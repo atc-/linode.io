@@ -162,7 +162,7 @@ describe('DNS', () => {
     });
   });
 
-  describe('#findAndUpdateDomain', () => {
+  describe('#findAndUpdateSubDomain', () => {
     it('should update the host and return a successful response', () => {
       const getDomainsParams = {api_key: 'abc', api_action: 'domain.list'};
       const getDomainsScope = nock('https://api.linode.com/').get('/').query(getDomainsParams).reply(200, VALID_DOMAIN_LIST_RESP);
@@ -178,7 +178,7 @@ describe('DNS', () => {
         .query(updateParams).reply(200, VALID_RESOURCE_UPDATE_RESP);
 
       return DNS.create('abc')
-        .findAndUpdateDomain('linode.com', 'www', '123.123.123.123').then((update) => {
+        .findAndUpdateSubDomain('linode.com', 'www', '123.123.123.123').then((update) => {
           expect(update).to.deep.equal(VALID_RESOURCE_UPDATE_RESP);
           expect(getDomainsScope.isDone()).to.be.true;
           expect(domainScope.isDone()).to.be.true;
