@@ -2,7 +2,7 @@
 
 const expect = require('chai').expect;
 const nock = require('nock');
-const DNS = require('../src/DNS');
+const DNS = require('../lib/DNS');
 const validator = require('validator');
 
 const VALID_RESOURCE_UPDATE_RESP =
