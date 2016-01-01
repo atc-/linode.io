@@ -16,4 +16,7 @@ Currently, this library supports:
 
 ### Listing domains
 
-    const DNS
+    const Linode = require('Linode');
+    const dns = new Linode(apiKey).dns();
+    dns.getDomains().then(console.log);
+    // See your domains listed
