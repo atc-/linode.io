@@ -1,6 +1,8 @@
+'use strict'
+
 const expect = require('chai').expect;
 const nock = require('nock');
-const DomainService = require('../lib/DomainService');
+const DNS = require('../src/DNS');
 const validator = require('validator');
 
 const VALID_RESOURCE_UPDATE_RESP =
@@ -82,14 +84,14 @@ const rejectErrors = function rejectErrors(err) {
   throw new Error(err);
 };
 
-describe('DomainService', () => {
+describe('DNS', () => {
   describe('#Constructor', () => {
     it('Asserts mandatory parameters', () => {
-      expect(() => new DomainService()).to.throw(Error, 'apiKey is required');
+      expect(() => DNS.create()).to.throw(Error, 'apiKey is required');
     });
 
     it('uses options', () => {
-      expect(new DomainService('abc', {lookupServiceURL: 'bob.com'}).lookupService).to.equal('bob.com');
+      expect(DNS.create('abc', {lookupServiceURL: 'bob.com'}).lookupService).to.equal('bob.com');
     });
   });
 
@@ -98,7 +100,7 @@ describe('DomainService', () => {
       const lookupParams = {api_key: 'abc', api_action: 'domain.list'};
       const lookup = nock('https://api.linode.com/').get('/').query(lookupParams).reply(200, VALID_DOMAIN_LIST_RESP);
 
-      new DomainService('abc').findDomain('linode.com').then((domain) => {
+      DNS.create('abc').findDomain('linode.com').then((domain) => {
         expect(domain).to.deep.equal(VALID_DOMAIN_LIST_RESP.DATA.filter((i) => { return i.DOMAIN === 'linode.com' }));
         expect(lookup.isDone()).to.be.true;
       }).catch(rejectErrors);
@@ -108,7 +110,7 @@ describe('DomainService', () => {
       const lookupParams = {api_key: 'abc', api_action: 'domain.list'};
       const lookup = nock('https://api.linode.com/').get('/').query(lookupParams).reply(200, VALID_DOMAIN_LIST_RESP);
 
-      new DomainService('abc').findDomain('linode.com').then((domain) => {
+      DNS.create('abc').findDomain('linode.com').then((domain) => {
         expect(domain).to.be.undefined;
         expect(lookup.isDone()).to.be.true;
       }).catch(rejectErrors);
@@ -120,7 +122,7 @@ describe('DomainService', () => {
 
       const scope = nock('http://www.icanhazip.com').get('/').reply(200, '123.123.123.123');
 
-      return new DomainService('abc').getExternalIP().then((extIP) => {
+      return DNS.create('abc').getExternalIP().then((extIP) => {
         expect(validator.isIP(extIP)).to.be.true;
         expect(extIP).to.equal('123.123.123.123');
         expect(scope.isDone()).to.be.true;
@@ -128,7 +130,7 @@ describe('DomainService', () => {
     });
 
     it('Invokes reject when the lookup fails', () => {
-      return new DomainService('abc', {lookupServiceURL: '127.0.0.1:1234'}).getExternalIP().then((extIP) => {
+      return DNS.create('abc', {lookupServiceURL: '127.0.0.1:1234'}).getExternalIP().then((extIP) => {
         console.error("This success handler shouldn't have been called");
         throw new Error("This success handler should not have been called:" + extIP);
       }).catch((err) => {
@@ -144,7 +146,7 @@ describe('DomainService', () => {
         .get('/')
         .query(params).reply(200, VALID_RESOURCE);
 
-      const resource = new DomainService('abc').getDomain('123456');
+      const resource = DNS.create('abc').getDomain('123456');
       return resource.then((resource) => {
         expect(resource).to.deep.equal(VALID_RESOURCE);
         expect(scope.isDone()).to.be.true;
@@ -157,7 +159,7 @@ describe('DomainService', () => {
     it('should return a non empty list of domains', () => {
       const params = {api_key: 'abc', api_action: 'domain.list'};
       const lookup = nock('https://api.linode.com/').get('/').query(params).reply(200, VALID_DOMAIN_LIST_RESP);
-      return new DomainService('abc').getDomains().then((domainJson) => {
+      return DNS.create('abc').getDomains().then((domainJson) => {
         expect(domainJson).to.deep.equal(VALID_DOMAIN_LIST_RESP);
         expect(lookup.isDone()).to.be.true;
       }).catch(rejectErrors)
@@ -179,7 +181,7 @@ describe('DomainService', () => {
         .get('/')
         .query(updateParams).reply(200, VALID_RESOURCE_UPDATE_RESP);
 
-      return new DomainService('abc')
+      return DNS.create('abc')
         .findAndUpdateDomain('linode.com', 'www', '123.123.123.123').then((update) => {
           expect(update).to.deep.equal(VALID_RESOURCE_UPDATE_RESP);
           expect(getDomainsScope.isDone()).to.be.true;
@@ -199,7 +201,7 @@ describe('DomainService', () => {
         .get('/')
         .query(params).reply(200, VALID_RESOURCE_UPDATE_RESP);
 
-      return new DomainService('abc')
+      return DNS.create('abc')
         .updateDomain('123', '28536', 'test.hostname').then((update) => {
           expect(update).to.deep.equal(VALID_RESOURCE_UPDATE_RESP);
           expect(updateScope.isDone()).to.be.true;

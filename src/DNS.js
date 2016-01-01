@@ -19,7 +19,13 @@ var get = (url, params) => {
 
 var lookupIPAndUpdateDomain = (domain, subdomain) => {
   return this.getExternalIP().then((ip) => { l.findAndUpdateDomain(domain, subdomain, ip) });
-}
+};
+
+const getExternalIP = () => {
+  return get('http://' + this.lookupService).then((ipStr) => {
+    return ipStr.trim()
+  });
+};
 
 class DomainService {
   constructor(apiKey, options) {
@@ -30,12 +36,6 @@ class DomainService {
 
   getDomains() {
     return get('https://api.linode.com/', {api_key: this.apiKey, api_action: 'domain.list'}).then(JSON.parse);
-  }
-
-  getExternalIP() {
-    return get('http://' + this.lookupService).then((ipStr) => {
-      return ipStr.trim()
-    });
   }
 
   getDomain(domainId) {
@@ -66,4 +66,7 @@ class DomainService {
   }
 }
 
-module.exports = DomainService;
+module.exports = {
+  create: (apiKey) => { return new DomainService(apiKey) },
+  getExternalIP: getExternalIP
+};
