@@ -70,7 +70,7 @@ You can get a [domain's information](https://www.linode.com/api/dns/domain.resou
      "TYPE":"master",
      "STATUS":1,
      "SOA_EMAIL":"dns@example.com",
-     "DOMAIN":"linode.com",
+     "DOMAIN":"atc.gd",
      "RETRY_SEC":0,
      "MASTER_IPS":"",
      "EXPIRE_SEC":0,
