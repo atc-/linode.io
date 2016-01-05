@@ -1,12 +1,11 @@
-'use strict'
+'use strict';
 
 const expect = require('chai').expect;
 const nock = require('nock');
 const DNS = require('../lib/DNS');
-const validator = require('validator');
 
 const VALID_RESOURCE_UPDATE_RESP =
-  {"ERRORARRAY":[],"DATA":{"ResourceID":28536},"ACTION":"domain.resource.update"};
+{"ERRORARRAY": [], "DATA": {"ResourceID": 28536}, "ACTION": "domain.resource.update"};
 
 const VALID_RESOURCE = {
   "ERRORARRAY": [],
@@ -40,37 +39,37 @@ const VALID_RESOURCE = {
 };
 
 const VALID_DOMAIN_LIST_RESP =
-  {
-   "ERRORARRAY":[],
-   "ACTION":"domain.list",
-   "DATA":[
-      {
-         "DOMAINID":5093,
-         "DESCRIPTION":"",
-         "TYPE":"master",
-         "STATUS":1,
-         "SOA_EMAIL":"dns@example.com",
-         "DOMAIN":"linode.com",
-         "RETRY_SEC":0,
-         "MASTER_IPS":"",
-         "EXPIRE_SEC":0,
-         "REFRESH_SEC":0,
-         "TTL_SEC":0
-      },
-      {
-         "DOMAINID":5125,
-         "DESCRIPTION":"",
-         "TYPE":"slave",
-         "STATUS":1,
-         "SOA_EMAIL":"",
-         "DOMAIN":"nodefs.com",
-         "RETRY_SEC":0,
-         "MASTER_IPS":"1.3.5.7;2.4.6.8;",
-         "EXPIRE_SEC":0,
-         "REFRESH_SEC":0,
-         "TTL_SEC":0
-      }
-   ]
+{
+  "ERRORARRAY": [],
+  "ACTION": "domain.list",
+  "DATA": [
+    {
+      "DOMAINID": 5093,
+      "DESCRIPTION": "",
+      "TYPE": "master",
+      "STATUS": 1,
+      "SOA_EMAIL": "dns@example.com",
+      "DOMAIN": "linode.com",
+      "RETRY_SEC": 0,
+      "MASTER_IPS": "",
+      "EXPIRE_SEC": 0,
+      "REFRESH_SEC": 0,
+      "TTL_SEC": 0
+    },
+    {
+      "DOMAINID": 5125,
+      "DESCRIPTION": "",
+      "TYPE": "slave",
+      "STATUS": 1,
+      "SOA_EMAIL": "",
+      "DOMAIN": "nodefs.com",
+      "RETRY_SEC": 0,
+      "MASTER_IPS": "1.3.5.7;2.4.6.8;",
+      "EXPIRE_SEC": 0,
+      "REFRESH_SEC": 0,
+      "TTL_SEC": 0
+    }
+  ]
 };
 
 require('blanket')({
@@ -97,7 +96,9 @@ describe('DNS', () => {
       const lookup = nock('https://api.linode.com/').get('/').query(lookupParams).reply(200, VALID_DOMAIN_LIST_RESP);
 
       DNS.create('abc').findDomain('linode.com').then((domain) => {
-        expect(domain).to.deep.equal(VALID_DOMAIN_LIST_RESP.DATA.filter((i) => { return i.DOMAIN === 'linode.com' }));
+        expect(domain).to.deep.equal(VALID_DOMAIN_LIST_RESP.DATA.filter((i) => {
+          return i.DOMAIN === 'linode.com'
+        }));
         expect(lookup.isDone()).to.be.true;
       }).catch(rejectErrors);
     });
@@ -110,28 +111,6 @@ describe('DNS', () => {
         expect(domain).to.be.undefined;
         expect(lookup.isDone()).to.be.true;
       }).catch(rejectErrors);
-    });
-  });
-
-  describe('#getExternalIP', () => {
-    it('Returns my external IP in a promise', () => {
-
-      const scope = nock('http://www.icanhazip.com').get('/').reply(200, '123.123.123.123');
-
-      return DNS.getExternalIP().then((extIP) => {
-        expect(validator.isIP(extIP)).to.be.true;
-        expect(extIP).to.equal('123.123.123.123');
-        expect(scope.isDone()).to.be.true;
-      }).catch(rejectErrors);
-    });
-
-    it('Invokes reject when the lookup fails', () => {
-      return DNS.getExternalIP('127.0.0.1:1234').then((extIP) => {
-        console.error("This success handler shouldn't have been called");
-        throw new Error("This success handler should not have been called:" + extIP);
-      }).catch((err) => {
-        expect(err.message).to.equal('connect ECONNREFUSED 127.0.0.1:1234');
-      });
     });
   });
 
@@ -151,11 +130,11 @@ describe('DNS', () => {
     });
   });
 
-  describe('#getDomains', () => {
+  describe('#list', () => {
     it('should return a non empty list of domains', () => {
       const params = {api_key: 'abc', api_action: 'domain.list'};
       const lookup = nock('https://api.linode.com/').get('/').query(params).reply(200, VALID_DOMAIN_LIST_RESP);
-      return DNS.create('abc').getDomains().then((domainJson) => {
+      return DNS.create('abc').list().then((domainJson) => {
         expect(domainJson).to.deep.equal(VALID_DOMAIN_LIST_RESP);
         expect(lookup.isDone()).to.be.true;
       }).catch(rejectErrors)
@@ -172,7 +151,13 @@ describe('DNS', () => {
         .get('/')
         .query(domainParam).reply(200, VALID_RESOURCE);
 
-      const updateParams = {api_key: 'abc', api_action: 'domain.resource.update', ResourceId: '28536', DomainId: '5093', Target: '123.123.123.123'};
+      const updateParams = {
+        api_key: 'abc',
+        api_action: 'domain.resource.update',
+        ResourceId: '28536',
+        DomainId: '5093',
+        Target: '123.123.123.123'
+      };
       const updateScope = nock('https://api.linode.com')
         .get('/')
         .query(updateParams).reply(200, VALID_RESOURCE_UPDATE_RESP);
@@ -190,8 +175,10 @@ describe('DNS', () => {
   describe('#updateDomain', () => {
     it('should call the Linode API', () => {
       const params =
-        {api_key: 'abc', api_action: 'domain.resource.update', ResourceId: '28536', DomainId: '123',
-          Target: 'test.hostname'};
+      {
+        api_key: 'abc', api_action: 'domain.resource.update', ResourceId: '28536', DomainId: '123',
+        Target: 'test.hostname'
+      };
 
       const updateScope = nock('https://api.linode.com')
         .get('/')
