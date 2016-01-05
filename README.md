@@ -26,7 +26,7 @@ Now that it's imported, you create an instance:
     
 You can then begin to use the services, e.g. DNS:
 
-    const dns = linode.dns();
+    const domain = linode.dns();
 
 The rest of this document assumes you've created an instance of `Linode` called `linode`.
 
@@ -36,15 +36,15 @@ Each service exposes the relevant API verbs, such as listing, creating or updati
 every function within a service returns a Promise, which can then be used to chain subsequent behaviour. To do so, merely
 register using `then`:
 
-    dns.findDomain('atc.gd').then(console.log);
+    domain.findDomain('atc.gd').then(console.log);
     
 or, a more useful example:
 
-    dns.findDomain('atc.gd').then((domain) => { console.log('atc.gd has DomainID' + domain.DOMAINID) });
+    domain.findDomain('atc.gd').then((d) => { console.log('atc.gd has DomainID' + d.DOMAINID) });
     
 Note that you should register rejection handlers, e.g. using `catch`:
 
-    d.findDomain('atc.gd').then(console.log).catch(console.error);
+    domain.findDomain('atc.gd').then(console.log).catch(console.error);
     // Some time later...
     { [Error: read ECONNRESET] code: 'ECONNRESET', errno: 'ECONNRESET', syscall: 'read' }
     
@@ -55,21 +55,21 @@ Otherwise your actions may fail silently.
 ### Listing domains
 
     const d = linode.dns();
-    d.getDomains().then(console.log);
+    d.list().then(console.log);
     // See your domains listed
     
 ### Finding a domain
 
-You can get a [domain's information](https://www.linode.com/api/dns/domain.resource.list) to utilise further:
+You can get a [domain's information](https://www.linode.com/api/domain/domain.resource.list) to utilise further:
     
-    linode.dns().findDomain('atc.gd').then(console.log);
+    linode.domain().findDomain('atc.gd').then(console.log);
     
     {
      "DOMAINID":5093,
      "DESCRIPTION":"",
      "TYPE":"master",
      "STATUS":1,
-     "SOA_EMAIL":"dns@example.com",
+     "SOA_EMAIL":"domain@example.com",
      "DOMAIN":"atc.gd",
      "RETRY_SEC":0,
      "MASTER_IPS":"",
