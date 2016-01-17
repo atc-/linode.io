@@ -5,7 +5,7 @@
   "repository": "github.com/atc-/linode.io",
   "main": "Linode.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha spec/*"
   },
   "author": "Alex Collins",
   "license": "GPL-3.0",
