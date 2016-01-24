@@ -2,6 +2,7 @@
 
 const Linode  = require('../Linode');
 const Util = require('../lib/Util')
+const expect = require('chai').expect;
 
 describe('Linode', () => {
 
