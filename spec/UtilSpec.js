@@ -10,7 +10,7 @@ describe('Util', () => {
   describe('#real', () => {
     it('Returns true when object is truthy', () => {
       expect(Util.isReal(1)).to.be.true;
-      expect(Util.isReal('')).to.be.true;
+      expect(Util.isReal("bob")).to.be.true;
       expect(Util.isReal(true)).to.be.true;
       expect(Util.isReal({})).to.be.true;
       expect(Util.isReal({a: 'a'}.a)).to.be.true;
